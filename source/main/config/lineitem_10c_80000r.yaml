@@ -1,0 +1,56 @@
+experiments:
+
+  - name: "lineitem_10c_80000r"
+
+    input:
+      path: "config/data/lineitem_10c_80000r.csv"
+      delimiter: ";"
+      header: true
+      infer_schema: false
+
+    spark:
+      max_partition_mb: 128
+
+      partitions:
+        mode: auto
+        num_partitions: 1
+        shuffle_partitions: 1
+        auto:
+          num_multiplier: 2
+          shuffle_multiplier: 2
+
+    representation:
+      encoding: true
+      packing: true
+
+    fd:
+      enabled: true
+      superkey_threshold: 0.80
+
+    sampling:
+      enabled: true
+      mode: auto
+      largest_k: 10
+      auto:
+        coverage: 0.3
+        min_k: 3
+        max_k: 20
+
+    pruning:
+      fd_pruning:
+        enabled: true
+      superset_pruning:
+        enabled: true
+      discovered_mvd_pruning:
+        enabled: true
+      complement_pruning:
+        enabled: true
+
+    output:
+      save_csv: true
+      output_path: "results/lineitem/lineitem.csv"
+
+    logging:
+      print_mvds: true
+      print_stats: true
+      print_spark_metrics: true

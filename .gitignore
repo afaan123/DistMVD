@@ -1,0 +1,9 @@
+# Python bytecode (source/main/*.py)
+__pycache__/
+*.py[cod]
+
+# Qodo tool directory (currently empty)
+.qodo/
+
+# macOS
+.DS_Store

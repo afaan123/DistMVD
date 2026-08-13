@@ -168,13 +168,13 @@ class MVDDiscovery:
     def discovery(self):
 
         lhs_by_level={}
-        for level in range(1,self.num_attributes-1):
+        for level in range(0,self.num_attributes-1):
             current_level=[]
             for c in combinations(range(self.num_attributes),level):
                 current_level.append(frozenset(c))
             lhs_by_level[level]=current_level
 
-        for level in range(1, self.num_attributes - 1):
+        for level in range(0, self.num_attributes - 1):
             print(f"\n{'=' * 50}")
             print(f"  LEVEL {level}")
             print(f"{'=' * 50}")
@@ -183,7 +183,10 @@ class MVDDiscovery:
             if level > 1:
                 self.closure.inherit_subset_closures(lhs_by_level[level])
 
-            if self.fd_enabled and self.fd_discovery.should_run_fd_discovery(level, lhs_by_level, self.closure):
+            if level == 0:
+                # X = {} has no FDs to discover; its closure is itself.
+                self.closure.initialize_closure(frozenset())
+            elif self.fd_enabled and self.fd_discovery.should_run_fd_discovery(level, lhs_by_level, self.closure):
                 print(f"\nFD discovery")
                 level_fds = self.fd_discovery.discover_for_level(lhs_by_level[level], level, self.closure)
                 new_fds = level_fds - self.functional_dependencies

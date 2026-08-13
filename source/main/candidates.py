@@ -37,7 +37,9 @@ class Candidates:
 
         for kind, lhs_t, rhs_t, z_t in candidate_rdd.collect():
             counters[kind] += 1
-            if kind == "AUTO_SK" or kind == "AUTO_FD":
+            if kind == "AUTO_SK" or kind == "AUTO_FD" or kind == "SKIP_SUPERSET":
+                # SKIP_SUPERSET is implied by an already-validated smaller LHS,
+                # so it holds; keeping it makes DEP(X) complete for minimality.
                 auto_validated.append((frozenset(lhs_t), frozenset(rhs_t)))
             elif kind == "VALIDATE":
                 candidates_to_validate[lhs_t].append((rhs_t, z_t))

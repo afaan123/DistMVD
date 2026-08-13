@@ -113,7 +113,7 @@ def run_experiment(config, spark):
         avg_cardinality = round(sum(cards) / len(cards), 2) if cards else 0
 
         n = len(attr_names)
-        lhs_search_space = sum(math.comb(n, k) for k in range(1, max(1, n - 1)))
+        lhs_search_space = sum(math.comb(n, k) for k in range(0, max(1, n - 1)))
 
         append_experiment_result(
             output_path = output_cfg["output_path"],
